@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginModule } from '../login/login.module';
-import { HomeModule } from '../home/home.module';
+import { NgModule } from '@angular/core';
 
+import { HomeModule } from '../home/home.module';
+import { LoginModule } from '../login/login.module';
 @NgModule({
   declarations: [],
   imports: [

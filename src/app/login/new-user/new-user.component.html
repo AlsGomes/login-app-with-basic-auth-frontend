@@ -6,25 +6,18 @@
 
     <form [formGroup]="userForm">
         <div class="grid flex-column align-content-center p-fluid">
+
             <div class="col-10 md:col-5 lg:col-3">
                 <span class="p-float-label">
                     <input id="name-input" type="text" pInputText formControlName="name">
                     <label for="name-input">Nome</label>
                 </span>
 
-                <p-message text="Informe um nome"
-                    *ngIf="userForm.get('name')?.hasError('required') && userForm.get('name')?.dirty" severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho mínimo de {{userForm.get('name')?.errors?.['minlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('name')?.hasError('minlength') && userForm.get('name')?.dirty" severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho máximo de {{userForm.get('name')?.errors?.['maxlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('name')?.hasError('maxlength') && userForm.get('name')?.dirty" severity="error">
-                </p-message>
+                <div class="mt-1">
+                    <p-message text="{{ getErrorMessage('name', userForm) }}" *ngIf="getErrorMessage('name', userForm)"
+                        severity="error">
+                    </p-message>
+                </div>
             </div>
 
             <div class="col-10 md:col-5 lg:col-3">
@@ -33,20 +26,10 @@
                     <label for="email-input">E-mail</label>
                 </span>
 
-                <p-message text="Informe um e-mail"
-                    *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho máximo de {{userForm.get('email')?.errors?.['maxlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('email')?.hasError('maxlength') && userForm.get('email')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <p-message text="E-mail inválido"
-                    *ngIf="userForm.get('email')?.hasError('email') && userForm.get('email')?.dirty" severity="error">
-                </p-message>
+                <div class="mt-1">
+                    <p-message text="{{ getErrorMessage('email', userForm) }}" *ngIf="getErrorMessage('email', userForm)" severity="error">
+                    </p-message>
+                </div>
             </div>
 
             <div class="col-10 md:col-5 lg:col-3" formGroupName="pass">
@@ -56,22 +39,11 @@
                     <label for="pass-input">Senha</label>
                 </span>
 
-                <p-message text="Informe uma senha"
-                    *ngIf="userForm.get('pass')?.get('password')?.hasError('required') && userForm.get('pass')?.get('password')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho mínimo de {{userForm.get('pass')?.get('password')?.errors?.['minlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('pass')?.get('password')?.hasError('minlength') && userForm.get('pass')?.get('password')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho mínimo de {{userForm.get('pass')?.get('password')?.errors?.['maxlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('pass')?.get('password')?.hasError('maxlength') && userForm.get('pass')?.get('password')?.dirty"
-                    severity="error">
-                </p-message>
+                <div class="mt-1">
+                    <p-message text="{{ getErrorMessage('pass.password', userForm) }}" *ngIf="getErrorMessage('pass.password', userForm)"
+                        severity="error">
+                    </p-message>
+                </div>
 
                 <div class="mt-3">
                     <span class="p-float-label">
@@ -81,28 +53,16 @@
                     </span>
                 </div>
 
-                <p-message text="Informe uma senha"
-                    *ngIf="userForm.get('pass')?.get('confirmationPassword')?.hasError('required') && userForm.get('pass')?.get('confirmationPassword')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho mínimo de {{userForm.get('pass')?.get('confirmationPassword')?.errors?.['minlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('pass')?.get('confirmationPassword')?.hasError('minlength') && userForm.get('pass')?.get('confirmationPassword')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <p-message
-                    text="Tamanho mínimo de {{userForm.get('pass')?.get('confirmationPassword')?.errors?.['maxlength'].requiredLength}} caracteres"
-                    *ngIf="userForm.get('pass')?.get('confirmationPassword')?.hasError('maxlength') && userForm.get('pass')?.get('confirmationPassword')?.dirty"
-                    severity="error">
-                </p-message>
-
-                <div class="mt-2">
-                    <p-message *ngIf="userForm.get('pass')?.errors?.['equals'] == false" text="As senhas não coincidem"
-                        severity="error"></p-message>
+                <div class="mt-1">
+                    <p-message text="{{ getErrorMessage('pass.confirmationPassword', userForm) }}"
+                        *ngIf="getErrorMessage('pass.confirmationPassword', userForm)" severity="error">
+                    </p-message>
                 </div>
 
+                <div class="mt-1">
+                    <p-message text="{{ getErrorMessage('pass', userForm) }}" *ngIf="getErrorMessage('pass', userForm)" severity="error">
+                    </p-message>
+                </div>
             </div>
 
             <div class="col-10 md:col-5 lg:col-3">

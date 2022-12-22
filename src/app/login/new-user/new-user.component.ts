@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { GenericValidator } from 'src/app/shared/generic-validator';
+
 @Component({
   selector: 'app-new-user',
   templateUrl: './new-user.component.html',
@@ -38,8 +40,13 @@ export class NewUserComponent implements OnInit {
     if (!password || !confirmationPassword)
       return null
 
-    const isValid = (password == confirmationPassword ? null : { equals: false })
+    const equalsObj = (password == confirmationPassword ? null : { equals: false })
 
-    return isValid
+    return equalsObj
   }
+
+  getErrorMessage(fieldName: string, form: FormGroup) {
+    return GenericValidator.getErrorMessage(fieldName, form)
+  }
+
 }
