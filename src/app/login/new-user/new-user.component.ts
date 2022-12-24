@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { GenericValidator } from 'src/app/shared/generic-validator';
+import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
 
 @Component({
   selector: 'app-new-user',
@@ -12,6 +12,8 @@ export class NewUserComponent implements OnInit {
 
   userForm: FormGroup = new FormGroup({})
 
+  errorMap = new Map<string, ErrorDetails>();
+
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
@@ -19,18 +21,23 @@ export class NewUserComponent implements OnInit {
   }
 
   buildUserForm() {
-    this.userForm = this.formBuilder.group({
-      name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
-      email: [null, [Validators.required, Validators.email, Validators.maxLength(70)]],
-      pass: this.formBuilder.group(
-        {
-          password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(70)]],
-          confirmationPassword: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(70)]]
-        },
-        {
-          validators: this.equalityBetween
-        })
-    })
+    this.userForm = this.formBuilder.group(
+      {
+        name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
+        email: [null, [Validators.required, Validators.email, Validators.maxLength(70)]],
+        pass: this.formBuilder.group(
+          {
+            password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(70)]],
+            confirmationPassword: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(70)]]
+          },
+          {
+            validators: this.equalityBetween,
+            updateOn: 'blur'
+          })
+      },
+      {
+        updateOn: 'blur'
+      })
   }
 
   equalityBetween(group: AbstractControl) {
@@ -45,8 +52,14 @@ export class NewUserComponent implements OnInit {
     return equalsObj
   }
 
-  getErrorMessage(fieldName: string, form: FormGroup) {
-    return GenericValidator.getErrorMessage(fieldName, form)
+  getErrorMessage(fieldName: string | string[], form: FormGroup) {
+    if (typeof fieldName == 'string') {
+      this.errorMap = GenericValidator.getErrorMessage(fieldName, form)
+    }
+    else {
+      for (let field of fieldName) {
+        this.errorMap = GenericValidator.getErrorMessage(field, form)
+      }
+    }
   }
-
 }

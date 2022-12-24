@@ -9,12 +9,13 @@
 
             <div class="col-10 md:col-5 lg:col-3">
                 <span class="p-float-label">
-                    <input id="name-input" type="text" pInputText formControlName="name">
+                    <input id="name-input" type="text" pInputText formControlName="name"
+                        (blur)="getErrorMessage('name', userForm)">
                     <label for="name-input">Nome</label>
                 </span>
 
                 <div class="mt-1">
-                    <p-message text="{{ getErrorMessage('name', userForm) }}" *ngIf="getErrorMessage('name', userForm)"
+                    <p-message text="{{ errorMap.get('name')?.message }}" *ngIf="errorMap.get('name')?.hasError"
                         severity="error">
                     </p-message>
                 </div>
@@ -22,45 +23,49 @@
 
             <div class="col-10 md:col-5 lg:col-3">
                 <span class="p-float-label">
-                    <input id="email-input" type="text" pInputText formControlName="email">
+                    <input id="email-input" type="text" pInputText formControlName="email"
+                        (blur)="getErrorMessage('email', userForm)">
                     <label for="email-input">E-mail</label>
                 </span>
 
                 <div class="mt-1">
-                    <p-message text="{{ getErrorMessage('email', userForm) }}" *ngIf="getErrorMessage('email', userForm)" severity="error">
+                    <p-message text="{{ errorMap.get('email')?.message }}" *ngIf="errorMap.get('email')?.hasError"
+                        severity="error">
                     </p-message>
                 </div>
             </div>
 
             <div class="col-10 md:col-5 lg:col-3" formGroupName="pass">
                 <span class="p-float-label">
-                    <p-password id="pass-input" [toggleMask]="true" [feedback]="false"
-                        formControlName="password"></p-password>
+                    <p-password id="pass-input" [toggleMask]="true" [feedback]="false" formControlName="password"
+                        (onBlur)="getErrorMessage(['pass.password','pass'], userForm)"></p-password>
                     <label for="pass-input">Senha</label>
                 </span>
 
                 <div class="mt-1">
-                    <p-message text="{{ getErrorMessage('pass.password', userForm) }}" *ngIf="getErrorMessage('pass.password', userForm)"
-                        severity="error">
+                    <p-message text="{{ errorMap.get('pass.password')?.message }}"
+                        *ngIf="errorMap.get('pass.password')?.hasError" severity="error">
                     </p-message>
                 </div>
 
                 <div class="mt-3">
                     <span class="p-float-label">
                         <p-password id="pass-confirm-input" [toggleMask]="true" [feedback]="false"
-                            formControlName="confirmationPassword"></p-password>
+                            formControlName="confirmationPassword"
+                            (onBlur)="getErrorMessage(['pass.confirmationPassword','pass'], userForm)"></p-password>
                         <label for="pass-confirm-input">Confirme sua senha</label>
                     </span>
                 </div>
 
                 <div class="mt-1">
-                    <p-message text="{{ getErrorMessage('pass.confirmationPassword', userForm) }}"
-                        *ngIf="getErrorMessage('pass.confirmationPassword', userForm)" severity="error">
+                    <p-message text="{{ errorMap.get('pass.confirmationPassword')?.message }}"
+                        *ngIf="errorMap.get('pass.confirmationPassword')?.hasError" severity="error">
                     </p-message>
                 </div>
 
                 <div class="mt-1">
-                    <p-message text="{{ getErrorMessage('pass', userForm) }}" *ngIf="getErrorMessage('pass', userForm)" severity="error">
+                    <p-message text="{{ errorMap.get('pass')?.message }}" *ngIf="errorMap.get('pass')?.hasError"
+                        severity="error">
                     </p-message>
                 </div>
             </div>
