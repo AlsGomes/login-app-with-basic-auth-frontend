@@ -1,12 +1,12 @@
 import { Permission } from "./permission"
 
 export interface User {
-    id?: string
+    id?: number
     name?: string
     email?: string
     password?: string
     confirmationPassword?: string
     createdAt?: Date
-    updatedAt?: Date
+    lastUpdated?: Date
     permissions?: Permission[]
 }

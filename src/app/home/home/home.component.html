@@ -1,7 +1,131 @@
 <div class="container">
+    <div class="grid flex justify-content-center">
+        <div class="col-10">
 
-    <div class="flex justify-content-center">
-        <h1>Login efetuado com sucesso</h1>
+            <div class="grid">
+                <div class="col-12">
+                    <h1>Seu perfil</h1>
+                </div>
+
+                <div class="col-12 md:col-6 p-fluid">
+                    <form [formGroup]="userForm">
+                        <div class="col-12">
+                            <span class="p-float-label">
+                                <input id="name-input" type="text" pInputText formControlName="name"
+                                    (blur)="getErrorMessage('name', userForm)">
+                                <label for="name-input">Nome</label>
+                            </span>
+
+                            <div class="mt-1">
+                                <p-message text="{{ errorMap.get('name')?.message }}"
+                                    *ngIf="errorMap.get('name')?.hasError" severity="error">
+                                </p-message>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <span class="p-float-label">
+                                <input id="email-input" type="text" pInputText formControlName="email">
+                                <label for="email-input">E-mail</label>
+                            </span>
+                        </div>
+
+                        <div class="col-6 md:col-3">
+                            <button pButton pRipple type="button" label="Alterar dados" class="p-button-raised"
+                                [disabled]="userForm.invalid"></button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-12 md:col-6 p-fluid">
+                    <form [formGroup]="passForm">
+                        <div class="col-12">
+                            <span class="p-float-label">
+                                <p-password id="pass-input" [toggleMask]="true" [feedback]="false"
+                                    formControlName="oldPassword"
+                                    (onBlur)="getErrorMessage('oldPassword', passForm)"></p-password>
+                                <label for="pass-input">Senha atual</label>
+                            </span>
+
+                            <div class="mt-1">
+                                <p-message text="{{ errorMap.get('oldPassword')?.message }}"
+                                    *ngIf="errorMap.get('oldPassword')?.hasError" severity="error">
+                                </p-message>
+                            </div>
+                        </div>
+
+                        <div formGroupName="pass" class="col-12">
+                            <span class="p-float-label">
+                                <p-password id="pass-input" [toggleMask]="true" [feedback]="false"
+                                    formControlName="newPassword"
+                                    (onBlur)="getErrorMessage(['pass.newPassword', 'pass'], passForm)"></p-password>
+                                <label for="pass-input">Nova senha</label>
+                            </span>
+
+                            <div class="mt-1">
+                                <p-message text="{{ errorMap.get('pass.newPassword')?.message }}"
+                                    *ngIf="errorMap.get('pass.newPassword')?.hasError" severity="error">
+                                </p-message>
+                            </div>
+
+                            <div class="mt-4">
+                                <span class="p-float-label">
+                                    <p-password id="pass-input" [toggleMask]="true" [feedback]="false"
+                                        formControlName="confirmationPassword"
+                                        (onBlur)="getErrorMessage(['pass.confirmationPassword', 'pass'], passForm)"></p-password>
+                                    <label for="pass-input">Confirme a nova senha</label>
+                                </span>
+                            </div>
+
+                            <div class="mt-1">
+                                <p-message text="{{ errorMap.get('pass.confirmationPassword')?.message }}"
+                                    *ngIf="errorMap.get('pass.confirmationPassword')?.hasError" severity="error">
+                                </p-message>
+                            </div>
+
+                            <div class="mt-1">
+                                <p-message text="{{ errorMap.get('pass')?.message }}"
+                                    *ngIf="errorMap.get('pass')?.hasError" severity="error">
+                                </p-message>
+                            </div>
+                        </div>
+
+                        <div class="col-6 md:col-3">
+                            <button pButton pRipple type="button" label="Alterar senha" class="p-button-raised"
+                                [disabled]="passForm.invalid"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="grid" *ngIf="isAdmin">
+                <div class="col-12">
+                    <h1>Usuários Cadastrados</h1>
+                </div>
+                <div class="col-12" style="display: block;">
+                    <p-table [value]="users">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Criado em</th>
+                                <th>Última atualização em</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-user>
+                            <tr>
+                                <td>{{user.id}}</td>
+                                <td>{{user.name}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.createdAt | date:'dd/MM/y, h:mm:ss a' }}</td>
+                                <td>{{user.lastUpdated | date:'dd/MM/y, h:mm:ss a'}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>

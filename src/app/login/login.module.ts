@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
 
+import { CreateNewPasswordComponent } from './create-new-password/create-new-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
 import { NewUserComponent } from './new-user/new-user.component';
@@ -17,7 +18,8 @@ import { NewUserComponent } from './new-user/new-user.component';
   declarations: [
     LoginComponent,
     NewUserComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    CreateNewPasswordComponent
   ],
   imports: [
     CommonModule,
