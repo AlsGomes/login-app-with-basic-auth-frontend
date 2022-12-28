@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
 import { User } from '../core/models/user';
 
 @Injectable({
@@ -6,31 +10,11 @@ import { User } from '../core/models/user';
 })
 export class UserService {
 
-  users: User[] = [{
-    id: 1,
-    name: "João",
-    email: "joao@gmail.com",
-    createdAt: new Date(2022, 11, 24, 18, 45, 44),
-    lastUpdated: new Date(2022, 11, 24, 18, 45, 44)
-  },
-  {
-    id: 2,
-    name: "Maria",
-    email: "maria@gmail.com",
-    createdAt: new Date(2022, 11, 24, 18, 45, 44),
-    lastUpdated: new Date(2022, 11, 24, 18, 45, 44)
-  },
-  {
-    id: 3,
-    name: "Alisson",
-    email: "alisson@gmail.com",
-    createdAt: new Date(2022, 11, 24, 18, 45, 44),
-    lastUpdated: new Date(2022, 11, 24, 18, 45, 44)
-  }]
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
+  getUsers$: Observable<User[]> = this.http.get<User[]>(`${environment.apiUrl}/users`)
 
-  getUsers() {
-    return this.users
+  createNewUser(user: User): Observable<User> {
+    return this.http.post<User>(`${environment.apiUrl}/users`, user)
   }
 }

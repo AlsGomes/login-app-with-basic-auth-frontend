@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 import { User } from 'src/app/core/models/user';
-import { AuthenticationService } from 'src/app/login/authentication.service';
+import { AuthenticationService } from 'src/app/security/authentication.service';
 import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
 import { UserService } from 'src/app/user/user.service';
 
@@ -13,7 +14,7 @@ import { UserService } from 'src/app/user/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  users: User[] = []
+  users$: Observable<User[]> = new Observable<User[]>();
 
   userForm: FormGroup = new FormGroup({})
   passForm: FormGroup = new FormGroup({})
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   fetchUsers() {
-    this.users = this.userService.getUsers();
+    this.users$ = this.userService.getUsers$
   }
 
   buildUserForm() {

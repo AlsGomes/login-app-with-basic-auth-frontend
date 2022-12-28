@@ -103,7 +103,7 @@
                     <h1>Usuários Cadastrados</h1>
                 </div>
                 <div class="col-12" style="display: block;">
-                    <p-table [value]="users">
+                    <p-table [value]="(users$ | async)!">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>ID</th>
