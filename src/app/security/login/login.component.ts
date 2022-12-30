@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
+import { User } from 'src/app/core/models/user';
 import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,11 @@ export class LoginComponent implements OnInit {
 
   errorMap = new Map<string, ErrorDetails>();
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthenticationService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.buildUserForm()
@@ -41,5 +48,28 @@ export class LoginComponent implements OnInit {
         this.errorMap = GenericValidator.getErrorMessage(field, form)
       }
     }
+  }
+
+  login() {
+    if (this.loginForm.invalid)
+      return;
+
+    const user: User = Object.assign({}, this.loginForm.value)
+    this.authService.login(user).subscribe({
+      next: (result) => this.handleSuccess(result),
+      error: (error) => this.handleError(error)
+    })
+  }
+
+  handleSuccess(result: any) {
+    this.router.navigate(['home'])
+    // window.alert('Seja bem-vindo')
+
+    // TODO Ordernar Observables
+  }
+
+  handleError(error: any) {
+    console.log(error)
+    window.alert('Erro de autenticação')
   }
 }

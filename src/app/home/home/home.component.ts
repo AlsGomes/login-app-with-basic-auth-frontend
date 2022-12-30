@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
   }
 
   fetchCurrentUserInfo() {
-    this.userForm.setValue(this.authService.currentUser)
+    this.userForm.patchValue(this.authService.currentUser ?? {} as User)
   }
 
   equalityBetween(group: AbstractControl) {

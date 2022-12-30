@@ -37,7 +37,7 @@
 
             <div class="col-10 md:col-5 lg:col-3">
                 <button pButton pRipple type="button" label="Login" class="p-button-raised"
-                    [disabled]="loginForm.invalid"></button>
+                    [disabled]="loginForm.invalid" (click)="login()"></button>
             </div>
 
             <div class="col-10 md:col-5 lg:col-3">
