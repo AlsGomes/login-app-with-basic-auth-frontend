@@ -50,7 +50,7 @@
 
                         <div class="col-6 md:col-3">
                             <button pButton pRipple type="button" label="Alterar dados" class="p-button-raised"
-                                [disabled]="userForm.invalid"></button>
+                                [disabled]="userForm.invalid" (click)="updateUserInfo()"></button>
                         </div>
                     </form>
                 </div>
@@ -110,7 +110,7 @@
 
                         <div class="col-6 md:col-3">
                             <button pButton pRipple type="button" label="Alterar senha" class="p-button-raised"
-                                [disabled]="passForm.invalid"></button>
+                                [disabled]="passForm.invalid" (click)="changeOwnPassword()"></button>
                         </div>
                     </form>
                 </div>
@@ -121,7 +121,7 @@
                     <h1>Usuários Cadastrados</h1>
                 </div>
                 <div class="col-12" style="display: block;">
-                    <p-table [value]="(users$ | async)!">
+                    <p-table [value]="(users)!">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>ID</th>

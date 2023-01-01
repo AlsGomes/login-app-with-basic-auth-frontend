@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-new-user',
@@ -14,7 +16,11 @@ export class NewUserComponent implements OnInit {
 
   errorMap = new Map<string, ErrorDetails>();
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.buildUserForm()
@@ -61,5 +67,27 @@ export class NewUserComponent implements OnInit {
         this.errorMap = GenericValidator.getErrorMessage(field, form)
       }
     }
+  }
+
+  createNewUser() {
+    const user = Object.assign({}, this.userForm.value)
+    user.password = user.pass.password
+    user.confirmationPassword = user.pass.confirmationPassword
+    delete user.pass
+
+    this.userService.createNewUser(user)
+      .subscribe({
+        next: (result) => this.handleSuccess(),
+        error: (error) => this.handleError(error)
+      })
+  }
+
+  handleSuccess() {
+    this.router.navigate(['login'])
+  }
+
+  handleError(error: any) {
+    window.alert(error.error.detail ?? 'Erro na criação de usuário')
+    console.log(error)
   }
 }

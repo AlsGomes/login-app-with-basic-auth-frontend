@@ -72,7 +72,7 @@
 
             <div class="col-10 md:col-5 lg:col-3">
                 <button pButton pRipple type="button" label="Cadastrar" class="p-button-raised"
-                    [disabled]="userForm.invalid"></button>
+                    [disabled]="userForm.invalid" (click)="createNewUser()"></button>
             </div>
         </div>
     </form>

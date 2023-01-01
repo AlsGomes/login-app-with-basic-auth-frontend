@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
+import { ChangePassword } from 'src/app/core/models/change-password';
 import { User } from 'src/app/core/models/user';
 import { AuthenticationService } from 'src/app/security/authentication.service';
 import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
   isMenuVisible: boolean = false
 
-  users$: Observable<User[]> = new Observable<User[]>();
+  users: User[] = []
 
   userForm: FormGroup = new FormGroup({})
   passForm: FormGroup = new FormGroup({})
@@ -46,7 +46,11 @@ export class HomeComponent implements OnInit {
   }
 
   fetchUsers() {
-    this.users$ = this.userService.getUsers$
+    this.userService.getUsers()
+      .subscribe({
+        next: (result) => { this.users = result },
+        error: (error) => { window.alert(error.error.detail ?? 'Erro ao atualizar os usuários') }
+      })
   }
 
   buildUserForm() {
@@ -84,9 +88,46 @@ export class HomeComponent implements OnInit {
     this.userForm.patchValue(this.authService.currentUser ?? {} as User)
   }
 
+  updateUserInfo() {
+    if (!this.authService.currentUser)
+      return
+
+    const id = this.authService.currentUser.id
+    const user = { name: this.userForm.get('name')?.value } as User
+    this.userService.updateUser(user, id!)
+      .subscribe({
+        next: (result) => { 
+          this.authService.refreshLoggedUserData()
+          this.fetchUsers()
+        },
+        error: (error) => { window.alert(error.error.detail ?? 'Erro ao atualizar os dados') }
+      })
+  }
+
   logout() {
     this.authService.logout()
     this.router.navigate(['login'])
+  }
+
+  changeOwnPassword() {
+    if (!this.authService.currentUser)
+      return
+
+    const changePassword: ChangePassword = {
+      oldPassword: this.passForm.get('oldPassword')!.value,
+      newPassword: this.passForm.get('pass')!.get('newPassword')!.value,
+      confirmationNewPassword: this.passForm.get('pass')!.get('confirmationPassword')!.value
+    }
+    
+    this.userService.changeOwnPassword(changePassword)
+      .subscribe({
+        next: (result) => {
+          this.authService.refreshLoggedUserAuth(changePassword.newPassword)
+          this.passForm.reset()
+          window.alert('Atualização realizada com sucesso!')
+        },
+        error: (error) => { window.alert(error.error.detail ?? 'Erro na atualização da senha') }
+      })
   }
 
   equalityBetween(group: AbstractControl) {

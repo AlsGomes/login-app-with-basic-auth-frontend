@@ -83,6 +83,33 @@ export class AuthenticationService {
     return !!this.currentUser
   }
 
+  refreshLoggedUserData() {
+    if (!this.currentUser)
+      return
+
+    this.http.get<User>(`${environment.apiUrl}/users/${this.currentUser.id}`)
+      .subscribe({
+        next: (user) => {
+          const currentUser = this.currentUser!
+          currentUser.name = user.name
+          currentUser.email = user.email
+          currentUser.createdAt = user.createdAt
+          currentUser.lastUpdated = user.lastUpdated
+          this.setCurrentUser(currentUser)
+        },
+        error: (error) => { window.alert(error.error.detail ?? 'Erro ao buscar usuário') }
+      })
+  }
+
+  refreshLoggedUserAuth(password: string) {
+    if (!this.currentUser)
+      return
+
+      const currentUser = this.currentUser!
+      currentUser.password = password
+      this.setEncodedAuth(currentUser)
+  }
+
   private setCurrentUser(user: User) {
     localStorage.setItem(LOCAL_STORAGE_CURRENT_USER, JSON.stringify(user))
   }
