@@ -76,4 +76,8 @@ export class LoginComponent implements OnInit {
   createNewUser() {
     this.router.navigate(['new-user'])
   }
+
+  goToForgotPassword() {
+    this.router.navigate(['forgot-password'])
+  }  
 }

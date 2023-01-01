@@ -90,4 +90,8 @@ export class NewUserComponent implements OnInit {
     window.alert(error.error.detail ?? 'Erro na criação de usuário')
     console.log(error)
   }
+
+  backToLogin() {
+    this.router.navigate(['login'])
+  }  
 }

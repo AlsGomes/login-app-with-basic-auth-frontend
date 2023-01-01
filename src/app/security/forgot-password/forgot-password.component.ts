@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ForgotPassword } from 'src/app/core/models/forgot-password';
 
 import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,7 +17,11 @@ export class ForgotPasswordComponent implements OnInit {
 
   errorMap = new Map<string, ErrorDetails>();
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthenticationService
+  ) { }
 
   ngOnInit(): void {
     this.buildUserForm()
@@ -40,5 +47,18 @@ export class ForgotPasswordComponent implements OnInit {
         this.errorMap = GenericValidator.getErrorMessage(field, form)
       }
     }
+  }
+
+  backToLogin() {
+    this.router.navigate(['login'])
+  }
+
+  forgotPassword() {
+    if (this.emailForm.invalid)
+      return
+
+    const email: ForgotPassword = { email: this.emailForm.get('email')!.value }
+
+    this.authService.forgotPassword(email)
   }
 }

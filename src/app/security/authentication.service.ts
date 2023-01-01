@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
+import { ForgotPassword } from '../core/models/forgot-password';
 import { Permission } from '../core/models/permission';
 import { User } from '../core/models/user';
 
@@ -14,6 +15,7 @@ const LOCAL_STORAGE_CURRENT_USER_PERMISSIONS: string = 'loginapp.userPermissions
   providedIn: 'root'
 })
 export class AuthenticationService {
+
   constructor(private http: HttpClient) { }
 
   private pass: string | undefined
@@ -105,9 +107,14 @@ export class AuthenticationService {
     if (!this.currentUser)
       return
 
-      const currentUser = this.currentUser!
-      currentUser.password = password
-      this.setEncodedAuth(currentUser)
+    const currentUser = this.currentUser!
+    currentUser.password = password
+    this.setEncodedAuth(currentUser)
+  }
+
+  forgotPassword(email: ForgotPassword) {
+    const warn = 'Alterar endpoint para exibir de alguma maneira o token ao usuário (apenas nesse caso de app demo)'
+    window.alert(warn)
   }
 
   private setCurrentUser(user: User) {

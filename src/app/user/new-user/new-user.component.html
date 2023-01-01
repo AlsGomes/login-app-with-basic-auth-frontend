@@ -74,6 +74,11 @@
                 <button pButton pRipple type="button" label="Cadastrar" class="p-button-raised"
                     [disabled]="userForm.invalid" (click)="createNewUser()"></button>
             </div>
+
+            <div class="col-10 md:col-5 lg:col-3">
+                <button pButton pRipple type="button" label="Voltar ao Login" icon="pi pi-arrow-left"
+                    (click)="backToLogin()" class="p-button-outlined p-button-primary"></button>
+            </div>
         </div>
     </form>
 </div>
