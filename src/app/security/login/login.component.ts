@@ -25,6 +25,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildUserForm()
+
+    if (this.authService.isCurrentUserLoggedIn)
+      this.handleSuccess()
   }
 
   buildUserForm() {
@@ -56,20 +59,21 @@ export class LoginComponent implements OnInit {
 
     const user: User = Object.assign({}, this.loginForm.value)
     this.authService.login(user).subscribe({
-      next: (result) => this.handleSuccess(result),
+      next: (result) => this.handleSuccess(),
       error: (error) => this.handleError(error)
     })
   }
 
-  handleSuccess(result: any) {
+  handleSuccess() {
     this.router.navigate(['home'])
-    // window.alert('Seja bem-vindo')
-
-    // TODO Ordernar Observables
   }
 
   handleError(error: any) {
-    console.log(error)
-    window.alert('Erro de autenticação')
+    window.alert(error.error.detail ?? 'Erro de autenticação')
+    this.loginForm.reset()
+  }
+
+  createNewUser() {
+    this.router.navigate(['new-user'])
   }
 }

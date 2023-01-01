@@ -1,6 +1,24 @@
+<p-sidebar [(visible)]="isMenuVisible" position="left" [baseZIndex]="10000">
+    <ng-template pTemplate="header">
+        <h1>{{userForm.get('name')?.value}}</h1>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <!-- Body Content -->
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple type="button" label="Logout" class="p-button-outlined p-button-primary"
+            (click)="logout()" icon="pi pi-sign-out">
+        </button>
+    </ng-template>
+</p-sidebar>
+
 <div class="container">
     <div class="grid flex justify-content-center">
         <div class="col-10">
+            <button pButton pRipple type="button" class="p-button-outlined p-button-primary"
+                (click)="isMenuVisible = !isMenuVisible" icon="pi pi-bars"></button>
 
             <div class="grid">
                 <div class="col-12">

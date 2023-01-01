@@ -7,9 +7,11 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
+import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 
 import { HomeComponent } from './home/home.component';
+
 @NgModule({
   declarations: [
     HomeComponent
@@ -23,7 +25,8 @@ import { HomeComponent } from './home/home.component';
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    MessageModule
+    MessageModule,
+    SidebarModule
   ]
 })
 export class HomeModule { }

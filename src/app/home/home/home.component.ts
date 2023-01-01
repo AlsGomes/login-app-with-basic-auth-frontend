@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { User } from 'src/app/core/models/user';
@@ -14,6 +15,8 @@ import { UserService } from 'src/app/user/user.service';
 })
 export class HomeComponent implements OnInit {
 
+  isMenuVisible: boolean = false
+
   users$: Observable<User[]> = new Observable<User[]>();
 
   userForm: FormGroup = new FormGroup({})
@@ -24,7 +27,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +39,10 @@ export class HomeComponent implements OnInit {
     this.buildPassForm()
 
     this.fetchCurrentUserInfo()
+  }
+
+  get isAdmin() {
+    return this.authService.isAdmin
   }
 
   fetchUsers() {
@@ -76,6 +84,11 @@ export class HomeComponent implements OnInit {
     this.userForm.patchValue(this.authService.currentUser ?? {} as User)
   }
 
+  logout() {
+    this.authService.logout()
+    this.router.navigate(['login'])
+  }
+
   equalityBetween(group: AbstractControl) {
     const newPassword = group.get('newPassword')?.value;
     const confirmationPassword = group.get('confirmationPassword')?.value;
@@ -98,9 +111,4 @@ export class HomeComponent implements OnInit {
       }
     }
   }
-
-  get isAdmin() {
-    return this.authService.isAdmin
-  }
-
 }

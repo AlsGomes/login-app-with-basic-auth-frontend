@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { Permission } from '../core/models/permission';
@@ -21,13 +21,17 @@ export class AuthenticationService {
   login(user: User): Observable<User> {
     this.pass = user.password
 
-    const observable = this.http.post<User>(`${environment.apiUrl}/authentication/login`, user)
-    observable.subscribe({
-      next: (user) => this.handleSuccess(user),
-      error: (error) => this.handleError(error)
+    return new Observable(subscriber => {
+      firstValueFrom(this.http.post<User>(`${environment.apiUrl}/authentication/login`, user))
+        .then(result => {
+          this.handleSuccess(result)
+          subscriber.next(result)
+        })
+        .catch(error => {
+          return subscriber.error(error)
+        })
+        .finally(() => subscriber.complete())
     })
-
-    return observable
   }
 
   logout() {
@@ -42,10 +46,6 @@ export class AuthenticationService {
     this.pass = undefined
 
     this.setEncodedAuth(user)
-  }
-
-  handleError(error: any) {
-    console.log(error)
   }
 
   get isAdmin(): boolean {
@@ -77,6 +77,10 @@ export class AuthenticationService {
 
   get encodedAuth() {
     return localStorage.getItem(LOCAL_STORAGE_ENCODED_AUTH)
+  }
+
+  get isCurrentUserLoggedIn(): boolean {
+    return !!this.currentUser
   }
 
   private setCurrentUser(user: User) {
