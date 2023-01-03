@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ErrorDetails, GenericValidator } from 'src/app/shared/generic-validator';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-create-new-password',
@@ -14,12 +16,18 @@ export class CreateNewPasswordComponent implements OnInit {
 
   errorMap = new Map<string, ErrorDetails>();
 
+  token: string | undefined
+
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthenticationService
   ) { }
 
   ngOnInit(): void {
     this.buildPassForm()
+    this.token = this.route.snapshot.params['token']
   }
 
   buildPassForm() {
@@ -63,6 +71,26 @@ export class CreateNewPasswordComponent implements OnInit {
         this.errorMap = GenericValidator.getErrorMessage(field, form)
       }
     }
+  }
+
+  backToLogin() {
+    this.router.navigate(['login'])
+  }
+
+  createNewPassword() {
+    if (!this.token)
+      return
+
+    this.authService.createNewPassword({
+      token: this.token,
+      password: this.passForm.get('pass')?.get('newPassword')?.value,
+      confirmationPassword: this.passForm.get('pass')?.get('confirmationPassword')?.value
+    }).subscribe({
+      next: (result) => {
+        this.router.navigate(['login'])
+      },
+      error: (error) => { window.alert(error.error.detail ?? 'Erro ao tentar criar nova senha') }
+    })
   }
 
 }

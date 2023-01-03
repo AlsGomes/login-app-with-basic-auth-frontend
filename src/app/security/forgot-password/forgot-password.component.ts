@@ -60,5 +60,11 @@ export class ForgotPasswordComponent implements OnInit {
     const email: ForgotPassword = { email: this.emailForm.get('email')!.value }
 
     this.authService.forgotPassword(email)
+      .subscribe({
+        next: (result) => {
+          this.router.navigate(['create-new-password', result.token])
+        },
+        error: (error) => { window.alert(error.error.detail ?? 'Erro na tentativa de recuperar a senha') }
+      })
   }
 }

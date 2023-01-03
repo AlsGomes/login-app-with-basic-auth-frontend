@@ -4,7 +4,9 @@ import { firstValueFrom, Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ForgotPassword } from '../core/models/forgot-password';
+import { NewPassword } from '../core/models/new-password';
 import { Permission } from '../core/models/permission';
+import { TokenOfForgotPassword } from '../core/models/token-of-forgot-password';
 import { User } from '../core/models/user';
 
 const LOCAL_STORAGE_ENCODED_AUTH: string = 'loginapp.encodedAuth'
@@ -112,9 +114,12 @@ export class AuthenticationService {
     this.setEncodedAuth(currentUser)
   }
 
-  forgotPassword(email: ForgotPassword) {
-    const warn = 'Alterar endpoint para exibir de alguma maneira o token ao usuário (apenas nesse caso de app demo)'
-    window.alert(warn)
+  forgotPassword(email: ForgotPassword): Observable<TokenOfForgotPassword> {
+    return this.http.post<TokenOfForgotPassword>(`${environment.apiUrl}/authentication/forgot-password`, email)
+  }
+
+  createNewPassword(newPassword: NewPassword): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/authentication/create-new-password`, newPassword)
   }
 
   private setCurrentUser(user: User) {

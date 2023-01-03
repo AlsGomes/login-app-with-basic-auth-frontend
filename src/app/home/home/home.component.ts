@@ -32,12 +32,10 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.authService.isAdmin)
-      this.fetchUsers()
-
     this.buildUserForm()
     this.buildPassForm()
 
+    this.fetchUsers()
     this.fetchCurrentUserInfo()
   }
 
@@ -46,6 +44,9 @@ export class HomeComponent implements OnInit {
   }
 
   fetchUsers() {
+    if (!this.authService.isAdmin)
+      return
+
     this.userService.getUsers()
       .subscribe({
         next: (result) => { this.users = result },
@@ -99,6 +100,7 @@ export class HomeComponent implements OnInit {
         next: (result) => { 
           this.authService.refreshLoggedUserData()
           this.fetchUsers()
+          window.alert('Dados atualizados com sucesso!')
         },
         error: (error) => { window.alert(error.error.detail ?? 'Erro ao atualizar os dados') }
       })
